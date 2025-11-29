@@ -22,9 +22,11 @@ export function generateQRCode(data: string, ecLevel: ErrorCorrectionLevel = "M"
     Array.from({ length: size }, (_, col) => qr.isDark(row, col)),
   )
 
+  const version = size > 0 ? Math.max(1, Math.round((size - 17) / 4)) : 1
+
   return {
     modules,
     size,
-    version: qr.getVersion(),
+    version,
   }
 }

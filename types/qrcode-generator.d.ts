@@ -7,7 +7,7 @@ declare module "qrcode-generator" {
     make(): void
     getModuleCount(): number
     isDark(row: number, col: number): boolean
-    getVersion(): number
+    typeNumber: number
   }
 
   function qrcode(typeNumber: TypeNumber, errorCorrectionLevel: ErrorCorrectionLevel): QRCode
