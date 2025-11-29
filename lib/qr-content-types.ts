@@ -120,15 +120,24 @@ export function formatQRContent(content: QRContent): string {
 
     case "vcard": {
       const { firstName, lastName, email, phone, organization, title, url, address } = content.data
-      const lines = ["BEGIN:VCARD", "VERSION:3.0", `N:${lastName};${firstName};;;`, `FN:${firstName} ${lastName}`]
+
+      // Use CRLF line endings for maximum vCard scanner compatibility
+      const lines = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        `N:${lastName};${firstName};;;`,
+        `FN:${[firstName, lastName].filter(Boolean).join(" ") || firstName || lastName}`,
+      ]
+
       if (organization) lines.push(`ORG:${organization}`)
       if (title) lines.push(`TITLE:${title}`)
-      if (phone) lines.push(`TEL:${phone}`)
-      if (email) lines.push(`EMAIL:${email}`)
+      if (phone) lines.push(`TEL;TYPE=CELL:${phone}`)
+      if (email) lines.push(`EMAIL;TYPE=INTERNET:${email}`)
       if (url) lines.push(`URL:${url}`)
       if (address) lines.push(`ADR:;;${address};;;;`)
+
       lines.push("END:VCARD")
-      return lines.join("\n")
+      return `${lines.join("\r\n")}\r\n`
     }
 
     case "event": {
